@@ -2,17 +2,16 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.filechooser.FileSystemView;
-import java.applet.Applet;
-import java.awt.Graphics;
 
 public class assign27
 {
 ServerSocket sersock;
+
 public assign27() throws IOException
 {
    try
    {
-    sersock = new ServerSocket(8200);
+    sersock=new ServerSocket(8200);
     System.out.println("server started at port 8200");
     while(true)
     { 
@@ -30,6 +29,7 @@ public assign27() throws IOException
 
 class webserverreqhandler implements Runnable
 {
+    
      DataOutputStream dos;
      Thread t1;
      String s,firstline="",method,resource;
@@ -39,11 +39,10 @@ class webserverreqhandler implements Runnable
      long upload_file_length=0;
      DataInputStream dis;
      String ip="";
-     
      public webserverreqhandler(Socket socket) throws IOException
      {
          sock=socket;
-         ip = sock.getLocalAddress().getHostAddress(); 
+         ip = sock.getLocalAddress().getHostAddress();   
          dis = new DataInputStream(sock.getInputStream());
          dos=new DataOutputStream(sock.getOutputStream());
          t1=new Thread(this);
@@ -51,16 +50,15 @@ class webserverreqhandler implements Runnable
     }
 
         @Override
-  
         public void run()
         {
           try
           {
             while(true)
             {
-                s=dis.readLine();
-                System.out.println(s);
-                 if(s.equals(""))
+                   s=dis.readLine();
+                   System.out.println(s);
+                   if(s.equals(""))
                    {
                        break;
                    }
@@ -69,12 +67,12 @@ class webserverreqhandler implements Runnable
                         firstline=s;
                     }
                    else if(s.startsWith("file"))
-                     {
+                    {
                        StringTokenizer st = new StringTokenizer(s);
                        st.nextToken();
                        upload_filename = st.nextToken();
                        upload_filename=upload_filename.replaceAll("%20"," ");
-                       System.out.println("name:"+upload_filename);
+                       System.out.println("name"+upload_filename);
                     }
                     else if(s.startsWith("Content-Length"))
                     {
@@ -102,7 +100,7 @@ class webserverreqhandler implements Runnable
                    upload_to=upload_to.substring(12);
                    File f_upload = new File(upload_to+"\\"+upload_filename);          
                    DataInputStream dis1 = new DataInputStream(this.sock.getInputStream());
-                   FileOutputStream fos = new FileOutputStream(f_upload);
+                   FileOutputStream foss = new FileOutputStream(f_upload);
                    byte b[] = new byte[10000000];
                    long count = 0;
                    long size = f_upload.length();
@@ -110,16 +108,16 @@ class webserverreqhandler implements Runnable
                    while (true)
                    {
                       r = dis1.read(b, 0, 10000000);
-                      fos.write(b, 0, r);
+                      foss.write(b, 0, r);
                       count = count + r;
                       if (size == count)
                       {
                          break;
                       }
-                       System.out.println(count+" file size--->"+upload_file_length);
+                       System.out.println(count+"   file size--->"+upload_file_length);
                    }
-                      fos.close();
-                      dis1.close();
+                        foss.close();
+                        dis1.close();
                 }
            else
            {
@@ -130,17 +128,20 @@ class webserverreqhandler implements Runnable
              resource = resource.replaceAll("%5B","[");
              resource = resource.replaceAll("%5D","]");
           
+         
+         
          System.out.println("resource::: "+resource);
           
          f = new File(resource);
-        
+         
          if(resource.startsWith("/mycomputer")) //to check drive
          {
               if(resource.indexOf("/",2)==-1)  //drive case
               { 
                   String res2="";
                   String res ="<html>"
-                                + "<head>"
+                                + "<head  >"
+                                
                                 + "<title>SkyNet</title>"
                                 + "<style type=\"text/css\" >"              //css
                                
@@ -154,9 +155,9 @@ class webserverreqhandler implements Runnable
                                 
                                 + "#all{width: 1000;margin-left: auto;margin-right: auto;}"
                                 + "#header{opacity:0.9;padding-top:20px;border:solid 2px gray;background-color: white;}"
-                                + "#sidebar1{opacity:0.9;border:solid 2px gray;width: 180px; background-color: white;float: left; padding-left: 20px;padding-bottom:38px; margin-top: 2px;}"
-                                + "#main{opacity:0.9;border:solid 2px gray;margin-left: 206px;padding-left: 50px; padding-right:20px; padding-bottom:44px; background-color:white;margin-top: 2px;margin-bottom: 2px;}"
-                                + "#footer{opacity:0.9;border:solid 2px gray;padding-top:10px;background-color: white; clear:both; margin-top:2px; } "
+                                
+                                + "#main{opacity:0.9;border:solid 2px gray;padding-left: 50px; padding-right:20px; padding-bottom:44px; background-color:white;margin-top: 2px;min-height: 384px;}"
+                                + "#footer{opacity:0.9;border:solid 2px gray;padding-top:10px;background-color: white; clear:both;margin-top:2px;  width:1000;text-align:right;} "
                                 + "</style> "
                                 + "</head>"
                                 
@@ -168,30 +169,29 @@ class webserverreqhandler implements Runnable
                                             + "<table>"
                                                 + "<tr>"
                                                     + "<td>"
-                                                        + "<h2 style = \"text-align:center;\" ><img src=\"/images/skynet2.png\" width=\"50\" height=\"50\"></h2>"
+                                                        + "<h2 style = \"text-align:center; color:black\" ><img src=\"/images/download.png\" height=\"80\" width=\"80\">PlayStore</h2>"
                                                     + "</td>"
-                                                    + "<td>"
-                                                        + "<h2>SkyNet</h2>"
-                                                    + "</td>"
+                                                    
                                                 + "</tr>"
                                             + "</table>"
                                             + "</center>"
                                 + " </div> "
-                                + "<div id=\"sidebar1\"><br>"+sidebar_link()+"</div> "
-                                + "<div id=\"main\" >"
+                                
+                                + "<div id=\"main\">"
+                                           
                                             + "<center>"
-                                            + "<table >"
+                                            + "<br><table >"
                                                 + "<tr>"
-                                                    + "<td >"
-                                                        + "<img src=\"/images/mycomputer.png\" width=\"80\" height=\"80\" >"
-                                                     + "</td>"
                                                      + "<td>"
-                                                        + "<h3 style = \"text-align:center;\" >My Computer</h3>"
+                                                        + "<h3 style = \"text-align:center;\" >Welcome to Unite PlayStore</h3>"
+                                          
                                                      + "</td>"
                                                 + "</tr>"
                                             + "</table>"
                                             + "</center><hr>"
-                                        + "<table >";
+                                        
+                                        + "<br><br><br><table style=\"text-align:center\" >";
+                                       
                      
                    File f2[]=File.listRoots();            // to show the disk drives
                    int len=f2.length;
@@ -202,32 +202,26 @@ class webserverreqhandler implements Runnable
                 
                        if(s1.equals("Local Disk")) 
                          {
-                           String s2 = FileSystemView.getFileSystemView().getSystemDisplayName(f2[i]);
-                              if(i%3==0 || i==0)
+                           String s2 =FileSystemView.getFileSystemView().getSystemDisplayName(f2[i]);
+                           if(i%3==0 || i==0)
                                  {
                                         res2 = res2+"<tr style=\"height: 137px;\">";
                                  }
-                           res2 = res2+"<td width=\"300\" align=\"center\"><div style=\"background-color:white; width: 200px; \">"
-                                      + "<a href=\"/mycomputer/"+f2[i].toString()+"\"><img src=\"/images/drive.png\" width=\"150\" height=\"75\"></a><br>"
+                          
+                              
+                           res2 = res2+"<td width=\"875\" align=\"center\"><div style=\"background-color:white; width: 200px; \">"
+                                      + "<a href=\"/mycomputer/"+f2[i].toString()+"\"><img src=\"/images/drive.png\" width=\"250\" height=\"100\"></a><br>"
                                       + "<a href=\"/mycomputer/"+f2[i].toString()+"\" style=\"text-decoration: none;\" >"+s2+"</a> </div></td> ";
+                         
                          }
-
                      }
-                   
-                   res = res + res2 +" </table>"
+                   res=res + res2 +" </table>"
                                   + "</div>"            // main's div closed
                                   + "<div id=\"footer\">"
-                                      + "<table>"
+                                      + "<table align=\"center\">"
                                           + "<tr>"
                                               + "<td>"
-                                                  + "<img src = \"/images/logo.png\"width=\"60\" height=\"60\">"
-                                              + "</td> "
-                                              + "<td  width=\"600\">"
-                                                  + "<h4><b><i>Beant College Of Engineering And Technology,Gurdaspur.<br>"
-                                                  + "Established and Promoted by Govt. of Punjab-143521</i></b></h4>"
-                                              + "</td> "
-                                              + "<td>"
-                                                  + "<h4> <b><i>Developed By:<br>Bhupinder Karan Singh  &nbsp;&&nbsp;  Deepak Sharma<br>Branch:-Comp.Sci.& Engg. </i></b></h4>"
+                                                  + "<h4> <b><i>Developed By<br>Bhupinder Karan Singh</i></b></h4>"
                                               + "</td>"
                                           + "</tr>"
                                       + "</table>"
@@ -245,9 +239,8 @@ class webserverreqhandler implements Runnable
              dos.writeBytes(res+"\r\n");
              dos.flush();
              } 
-              
               else
-              {  
+              {
                  File f9 = new File(resource);
                  String res="";
                  String res2="";
@@ -265,8 +258,8 @@ class webserverreqhandler implements Runnable
                                + "body{background-image: url('/images/2.jpg');background-attachment:fixed;}"      //background image
                                + "#all{width: 1000;margin-left: auto;margin-right: auto;}"
                                + "#header{opacity:0.9;filter:alpha(opacity=100);padding-top:20px;border:solid 2px gray;background-color: white;}"
-                               + "#sidebar1{opacity:0.9;border:solid 2px gray;width: 180px; background-color: white;float: left; padding-left: 20px; margin-top: 2px;padding-bottom:38px;}"
-                               + "#main{opacity:0.9;border:solid 2px gray;margin-left: 206px;padding-left: 60px;padding-top: 20px; padding-right:60px; background-color: white;padding-bottom:33px;margin-top: 2px;}"
+                               
+                               + "#main{opacity:0.9;border:solid 2px gray;padding-left: 60px;padding-top: 20px; padding-right:60px; background-color: white;padding-bottom:33px;margin-top: 2px; min-height: 384px;}"
                                + "#footer{opacity:0.9;border:solid 2px gray;padding-top:10px;background-color: white; clear:both;margin-top:2px; } "
                                + "</style>"
                                + "</head>"
@@ -278,42 +271,35 @@ class webserverreqhandler implements Runnable
                                                + "<table>"
                                                    + "<tr>"
                                                        + "<td>"
-                                                           + "<h2 style = \"text-align:center;\" > <img src=\"/images/skynet2.png\" width=\"50\" height=\"50\">"
-                                                       + "</td>"
-                                                       + "<td>"
-                                                           + "<h2>SkyNet</h2>"
+                                                           + "<h2 style = \"text-align:center; color:black\" ><img src=\"/images/download.png\" height=\"80\" width=\"80\">PlayStore</h2>"
                                                        + "</td>"
                                                    + "</tr>"
                                                + "</table>"
                                            + "</center> "
                                + "</div> "
-                               + "<div id=\"sidebar1\">"
-                                            + "<br>"+sidebar_link()+"</div> "
+                               
                          
                                + "<div id=\"main\" >"
                                             + "<table>"
                                                 + "<tr>"
                                                     + "<td width=\"950\" >"
-                                                    + "<center>"
-                                                    + "<h3 style = \"text-align:center;\">Now Showing:-&nbsp;"+resource.substring(12)+"</h3>"
-                                                    + "</center>"
+                                                    
+                                                    + "<a href=\"http://127.0.0.1:8200/mycomputer\" style = \"text-align:left;\" ><img src=\"/images/home.png\" height=\"40\" width=\"80\"></a>"
+                                                    
+                                                     
                                                     + "</td>"
                                                     + "<td>"
                                                         + "<a href = \""+f9.getParent()+"\"   style=\"text-decoration: none;\" >"
                                                         + "<h3 style = \"text-align:right;\" ><img src=\"/images/back1.png\" width=\"50\" height=\"50\"></a>"  //back button as image
                                                     + "</td>"
                                                 + "</tr>"
+                                              +"<marquee behavior=\"alternate\" direction=\"left\" scrollamount=\"4\" bgcolor=white><font style=\"color:#355692;\">Use Winrar to Extract the Downloaded Files</font></marquee>"
                                          +"</table><hr>";
                   
                       
-                           res = res+"</h1><br>"
-                               + "<applet codebase = \"../build/classes/\" code=\"UploadingAppletDemo.class\" archive=\"/images/UploadingApplet.jar\" width=\"500\" height=\"250\" alt=\"Error loading applet\">\n" 
-                               + "<param name=\"ip\" value=\""+ip+"\"></param>\n" 
-                               + "<param name=\"uploading_path\" value=\""+f9.getPath()+"\"></param>\n"
-                               + "</applet>"
-                               + "<br><br><table ><br>";
+                          
  
-                File f=new File(resource.substring(12));
+                File f=new File(resource.substring(12));      
                 File f2[]=f.listFiles();
                 int len = f2.length;
                 for(int i=0;i<len;i++)
@@ -324,39 +310,8 @@ class webserverreqhandler implements Runnable
                   }
                    else if(f2[i].isFile())
                   {
-                         if(resource.endsWith("Pictures/"))
-                         {
-                           if(i%2==0 || i==0)
-                           {
-                             res2=res2+"<tr height=\"200px;\">";
-                           }
-                            res2 = res2+"<td width=\"300\" align=\"center\"><div style=\"background-color: white; width: 200px;\">"
-                                      + "<a href=\"/images/"+f2[i].toString()+"\" target=\"_blank\" ><img src=\"/images/"+f2[i].toString()+"\" width=\"200\" height=\"125\"></a><br>"
-                                      + "<a href=\"/images/"+f2[i].toString()+"\" style=\"text-decoration: none;\">"+f2[i].getName()+"</a></div></td> ";
-                        }
-               
-                  else     if(resource.endsWith("Music/"))
-                         {
-                           if(i%1==0 || i==0)
-                           {
-                             res2=res2+"<tr height=\"200px;\">";
-                           }
-                            res2 = res2+"<td width=\"300\" align=\"center\"><div style=\"background-color: white; width: 200px; \">"
-                                      + "<a href=\"/images/"+f2[i].toString()+"\"  target=\"_blank\" ><img src=\"/images/mp3.png\" width=\"100\" height=\"50\"></a><br>"
-                                      + "<a href=\"/images/"+f2[i].toString()+"\" style=\"text-decoration: none;\">"+f2[i].getName()+"</a></div></td> ";
-                        }
-                      else    if(resource.endsWith("Videos/"))
-                         {
-                           if(i%2==0 || i==0)
-                           {
-                             res2=res2+"<tr height=\"200px;\">";
-                           }
-                            res2 = res2+"<td width=\"300\" align=\"center\"><div style=\"background-color: white; width: 200px; \">"
-                                      + "<a href=\"/images/"+f2[i].toString()+"\" target=\"_blank\" ><img src=\"/images/video.png\" width=\"100\" height=\"75\"></a><br>"
-                                      + "<a href=\"/images/"+f2[i].toString()+"\"  style=\"text-decoration: none;\">"+f2[i].getName()+"</a></div></td> ";
-                        }
-                      
-                  else if(f2[i].toString().endsWith(".jpg"))
+                         
+                      if(f2[i].toString().endsWith(".jpg"))
                         {
                            res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/jpg.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                         }
@@ -388,14 +343,8 @@ class webserverreqhandler implements Runnable
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/text.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                     }
-                  else  if(f2[i].toString().endsWith(".java"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/text.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else  if(f2[i].toString().endsWith(".class"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/default.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
+                  
+                  
                    else  if(f2[i].toString().endsWith(".pdf"))
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/pdf.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
@@ -404,18 +353,12 @@ class webserverreqhandler implements Runnable
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/exe.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                     }
-                   else  if(f2[i].toString().endsWith(".bat"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/bat.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
+                  
                   else   if(f2[i].toString().endsWith(".png"))
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/jpg.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                     }
-                  else    if(f2[i].toString().endsWith(".apk"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/apk.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
+                 
                   else     if(f2[i].toString().endsWith(".doc"))
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/doc.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
@@ -424,22 +367,8 @@ class webserverreqhandler implements Runnable
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/docx.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                     }
-                  else   if(f2[i].toString().endsWith(".ppt"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/ppt.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else    if(f2[i].toString().endsWith(".bin"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/rar.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else   if(f2[i].toString().endsWith(".nes"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/nester.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else   if(f2[i].toString().endsWith(".dat"))
-                    {
-                       res2 = res2+"<td width=\"800\"><br<img src=\"/images/avi.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\"  target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
+                  
+                 
                   else   if(f2[i].toString().endsWith(".wav"))
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/mp3.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
@@ -448,22 +377,7 @@ class webserverreqhandler implements Runnable
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/iso.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                     }
-                  else  if(f2[i].toString().endsWith(".iso"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/iso.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else  if(f2[i].toString().endsWith(".dll"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/dll.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else   if(f2[i].toString().endsWith(".xml"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/xml.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
-                  else  if(f2[i].toString().endsWith(".jar"))
-                    {
-                       res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/rar.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
-                    }
+                  
                   else   if(f2[i].toString().endsWith(".rar"))
                     {
                        res2 = res2+"<tr><td width=\"800\"><br><img src=\"/images/rar.png\" width=\"40\" height=\"40\"> <a href=\"/images/piccc/"+f2[i].toString()+"\" target=\"_blank\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
@@ -490,7 +404,7 @@ class webserverreqhandler implements Runnable
                  else
                       
                   {
-                      res2 = res2+"<tr>  <td> <br><img src=\"/images/folder2.png\" width=\"40\" height=\"40\">  <a href=\"/mycomputer/"+f2[i].toString()+"\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
+                      res2 = res2+"<tr>  <td> <br> <a href=\"/mycomputer/"+f2[i].toString()+"\" style=\"text-decoration: none;\" >"+f2[i].getName().toString()+"</a><br><br></td></tr>";
                    } 
                 }
                
@@ -503,12 +417,12 @@ class webserverreqhandler implements Runnable
                                               + "<td>"
                                                   + "<img src = \"/images/logo.png\"width=\"60\" height=\"60\">"
                                               + "</td>"
-                                              + "<td  width=\"600\">"
+                                              + "<td  width=\"700\">"
                                                   + "<h4><b><i>Beant College Of Engineering And Technology,Gurdaspur.<br>"
                                                   + "Established and Promoted by Govt. of Punjab-143521</i></b></h4>"
                                               + "</td> "
                                               + "<td>"
-                                                  + "<h4> <b><i>Developed By:<br>Bhupinder Karan Singh  &nbsp;&&nbsp;  Deepak Sharma<br>Branch:-Comp.Sci.& Engg. </h4></i></b>"
+                                                  + "<h4> <b><i>Developed By:<br>Bhupinder Karan Singh<br>Branch:-Comp.Sci.& Engg. </h4></i></b>"
                                               + "</td>"
                                           + "</tr> "
                                  + " </div>"            //footer's div closed here
@@ -533,29 +447,14 @@ class webserverreqhandler implements Runnable
             File f_im;
             String name="";
             
-            int p=resource.indexOf("/images");
+            int p = resource.indexOf("/images");
             String res_path=resource.substring(p);
             
-            if(res_path.indexOf("Pictures")!=-1)
-            {
-              f_im=new File(resource.substring(7));
-              name=f_im.getPath();
-             }
-            else if(res_path.indexOf("Music")!=-1)
-            {
-              f_im=new File(resource.substring(7));
-              name = f_im.getPath();
-              }
-            else if(res_path.indexOf("Videos")!=-1)
-            {
-              f_im=new File(resource.substring(7));
-              name = f_im.getPath();
-             }
-           
-            else if(res_path.indexOf("piccc")!=-1)
+            if(res_path.indexOf("piccc")!=-1)
             {
                f_im=new File(resource.substring(14));
                name=f_im.getPath();
+              // System.out.println(":::::::::::::::::::"+f_im);
             }
 
             else
@@ -595,11 +494,11 @@ class webserverreqhandler implements Runnable
          
          }
           else
-          { 
+          {
+            dos.writeBytes("HTTP/1.1 200 OK\r\n");
             long size = f.length();
             if(f.exists())
             {
-              dos.writeBytes("HTTP/1.1 200 OK\r\n");
               dos.writeBytes("Content-Length: "+f.length()+"\r\n");
               dos.writeBytes("Content-Type: "+mime_types.gettype(f.getName())+"\r\n");
               dos.writeBytes("\r\n"); 
@@ -620,7 +519,6 @@ class webserverreqhandler implements Runnable
             }
             else
             {
-                dos.writeBytes("HTTP/1.1 200 OK\r\n");
                 dos.writeBytes("Content-Length: "+f.length()+"r\n");
                 dos.writeBytes("Content-Type: text/html\r\n");
                 dos.writeBytes("\r\n");
@@ -643,36 +541,13 @@ class webserverreqhandler implements Runnable
         }
       }
   }
-    
-      public String sidebar_link()
-    {
-        String rs="<a href=\"/mycomputer\" style=\"text-decoration: none;\" > <img src=\"/images/mycomputer.png\" width=\"30\" height=\"30 \"> My Computer</a><br>";
-        String a1="";
-        File f3[]=File.listRoots();
-        int len=f3.length;
-        for(int i=0;i<len;i++)
-        {
-            String path=f3[i].toString();
-            String s1 = FileSystemView.getFileSystemView().getSystemTypeDescription(f3[i]);
-            if(s1.equals("Local Disk"))
-            {
-                 String s2 = FileSystemView.getFileSystemView().getSystemDisplayName(f3[i]);
-                 a1 = a1 + "&nbsp;&nbsp;&nbsp;<a href=\"/mycomputer/"+path+"\" style=\"text-decoration: none;\" > <img src=\"/images/drive.png\" width=\"30\" height=\"30\"> "+s2+"</a><br>";
-            }
-        }
-        String a2="<a href=\"/mycomputer/C:/Users/"+System.getProperty("user.name")+"/Documents/\" style=\"text-decoration: none;\" ><br> <img src=\"/images/mydocuments.png\" width=\"30\" height=\"30\">  My Documents</a>";
-        String a3="<a href=\"/mycomputer/C:/Users/"+System.getProperty("user.name")+"/Pictures/ \" style=\"text-decoration: none;\" ><br> <img src=\"/images/mypictures.png \" width=\"30\" height=\"30\"> My Pictures</a>";
-        String a4="<a href=\"/mycomputer/C:/Users/"+System.getProperty("user.name")+"/Downloads/\" style=\"text-decoration: none;\" ><br> <img src=\"/images/downloads.png  \" width=\"30\" height=\"30\"> Downloads</a>";
-        String a5="<a href=\"/mycomputer/C:/Users/"+System.getProperty("user.name")+"/Music/    \" style=\"text-decoration: none;\" ><br> <img src=\"/images/mp3.png        \" width=\"30\" height=\"30\"> My Music</a>";
-        String a6="<a href=\"/mycomputer/C:/Users/"+System.getProperty("user.name")+"/Videos/   \" style=\"text-decoration: none;\" ><br> <img src=\"/images/video.png      \" width=\"30\" height=\"30\"> My Videos</a>";
-        rs = rs+a1+a2+a3+a4+a5+a6;
-        return rs;
-    }
+   
       
       
     public static void main(String args[]) throws IOException 
     {
         assign27 obj=new assign27();
+       
     }
 }
 

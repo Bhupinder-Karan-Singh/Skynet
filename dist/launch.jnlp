@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp href="launch.jnlp" spec="1.0+">
+    <information>
+        <title>Skynet 3</title>
+        <vendor>khalsa</vendor>
+        <homepage href=""/>
+        <description>Skynet 3</description>
+        <description kind="short">Skynet 3</description>
+    </information>
+    <update check="always"/>
+    <resources>
+        <j2se java-vm-args="-Djava.security.policy=applet.policy" version="1.7+"/>
+        <jar href="Skynet_3.jar" main="true"/>
+    </resources>
+    <applet-desc height="300" main-class="UploadingAppletDemo" name="Skynet 3" width="300">
+    </applet-desc>
+</jnlp>
